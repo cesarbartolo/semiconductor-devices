@@ -92,7 +92,7 @@ def Gain(data_dark, data_photo):
     return (gain)
 
     
-def Responsivity(data_current, gain, input_power):
+def Responsivity_apd(data_current, gain, input_power):
     """
     Responsivity(current, input_power):Calculate and plot the responsivity 
     """
@@ -105,6 +105,21 @@ def Responsivity(data_current, gain, input_power):
     plt.legend()
     print('Responsivity at -10V: '+ str(responsivity_PIN))
     return (responsivity_APD)
+
+
+def Responsivity(photocurrent,darkcurrent, input_power, voltage_max):
+    """
+    Responsivity(current, input_power):Calculate and plot the responsivity 
+    """
+    responsivity_PIN= photocurrent[0:-voltage_max]-darkcurrent[0:-voltage_max]/input_power
+    #responsivity_APD=responsivity_PIN*gain
+    plt.plot(responsivity_PIN)
+    plt.yscale('log')
+    plt.xlabel('Voltage(V)', fontsize=16)
+    plt.ylabel('Responsivity(A/W)', fontsize=16)
+    plt.legend()
+    print('Responsivity: '+ str(responsivity_PIN[-voltage_max]))
+    return (responsivity_PIN)
 
 
 def EQE(current,input_power, lamda):
