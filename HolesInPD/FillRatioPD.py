@@ -12,19 +12,24 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 
+"""
 
 def area_hole (diameter_hole):
     area_hole= np.pi * (diameter_hole/2)**2
     return (area_hole)
 
-def active_area(diameter_hole):
-    active_area= np.pi * (diameter_hole/2)**2
-    return (active_area)
+
 
 def area_unitcell_square(periodicity,diameter_hole):
     area_unitcell= ((periodicity)**2) - area_hole(diameter_hole)
     return (area_unitcell)
 
+"""
+
+
+def complete_area(complete_diameter):
+    complete_area_device= np.pi * (complete_diameter/2)**2
+    return (complete_area_device)
 
 def fill_ratio_square( diameter_hole, period,diameter_pd ):
     area_hole=np.pi * (diameter_hole/2)**2
@@ -38,15 +43,25 @@ def fill_ratio_square( diameter_hole, period,diameter_pd ):
 
 
 
-def fill_ratio_hexagonal( diameter_hole, period,diameter_pd ):
+def fill_ratio_hexagonal( diameter_hole, period,diameter_pd, diameter_general ):
+    '''
+    diameter_pd=diameter of harea were holes are located
+    diameter_general= total diameter of device
+    
+    '''
     area_hole=np.pi * (diameter_hole/2)**2
     area_device=np.pi * (diameter_pd/2)**2
     area_unitcell_hexagonal=(period*np.sin(np.deg2rad(60))*period)# considering hexagonal lattice
     numberHoles_inDevice=area_device/area_unitcell_hexagonal #hexagonal lattice
     area_air=numberHoles_inDevice*area_hole
+    area_total=np.pi*(diameter_general/2)**2 - area_air
+    
     Effective_Area_Device=area_device - area_air
-    fillRatio=area_air/area_device
-    return (diameter_hole*1e9, period*1e9, diameter_pd*1e6,numberHoles_inDevice,area_device,Effective_Area_Device,fillRatio)
+    fillRatio=area_air/area_total
+  
+    return (diameter_hole*1e9, period*1e9, diameter_pd*1e6,numberHoles_inDevice,area_device,Effective_Area_Device,fillRatio, area_total)
+
+
     
     
 #diameters=np.arange(400,1400,100)*1e-9
@@ -74,6 +89,7 @@ NUMBER_HOLES=[]
 AREA_DEVICE=[]
 EFFECTIVE_AREA=[]
 FILL_RATIO=[]
+TOTAL_EFFECTIVE_AREA=[]
 
 """
 results  =  [DIAMETER_HOLES, PERIOD,
@@ -84,7 +100,7 @@ EFFECTIVE_AREA, FILL_RATIO]
 
 for d in diameters:
     for p in periods[diameters.index(d)]:
-        diameter_hole, period, diameter_pd,numberHoles_inDevice,area_device,Effective_Area_Device,fillRatio = fill_ratio_hexagonal( d*1e-9, p*1e-9, 70e-6 )
+        diameter_hole, period, diameter_pd,numberHoles_inDevice,area_device,Effective_Area_Device,fillRatio, total_effective_area = fill_ratio_hexagonal( d*1e-9, p*1e-9, 70e-6, 100e-6)
         DIAMETER_HOLES.append(diameter_hole)
         PERIOD.append(period)
         DIAMETER_PD.append(diameter_pd)
@@ -92,6 +108,8 @@ for d in diameters:
         AREA_DEVICE.append(area_device)
         EFFECTIVE_AREA.append(Effective_Area_Device)
         FILL_RATIO.append(fillRatio)
+        TOTAL_EFFECTIVE_AREA.append(total_effective_area)
+        
 '''
     
 csvfile= './csvfile.csv'
@@ -108,28 +126,12 @@ data={'diameter_holes':DIAMETER_HOLES,
         'number_holes':NUMBER_HOLES,
         'area_device': AREA_DEVICE,
         'effective_area':EFFECTIVE_AREA,
-        'fill_ratio': FILL_RATIO
+        'fill_ratio': FILL_RATIO,
+        'total_effective_area': TOTAL_EFFECTIVE_AREA
  
 }
  
 results_holes=pd.DataFrame(data)
 
 export_csv=results_holes.to_csv('./results_calculations_hexagonal.csv')
-
-
-"""
-def numberOfHoles_Device(area_unitcell, area_device):
-    number_holes=area_device/ area_unitcell
-    return (number_holes)
-    
-def area_air(number_holes,area_hole):
-    area_air=number_holes*area_hole
-    return (area_air)
-
-def fill_ratio(area_air,active_area):
-    fill_ratio=area_air/active_area
-    return (fill_ratio)
-
-"""
-
 
