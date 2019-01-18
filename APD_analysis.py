@@ -132,7 +132,7 @@ def EQE(current,input_power, lamda):
     plt.xlabel('Voltage(V)', fontsize=16)
     plt.ylabel('EQE', fontsize=16)
     plt.legend()
-    print('EQE at -10V: '+ str(quantum_efficiency[-10]))
+    #print('EQE at -10V: '+ str(quantum_efficiency[-10]))
     return (quantum_efficiency)
 
 """
