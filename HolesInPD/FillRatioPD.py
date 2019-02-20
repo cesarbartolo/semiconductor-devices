@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 
-
+'''
 def area_hole (diameter_hole):
     area_hole= np.pi * (diameter_hole/2)**2
     return (area_hole)
@@ -24,7 +24,7 @@ def active_area(diameter_hole):
 def area_unitcell_square(periodicity,diameter_hole):
     area_unitcell= ((periodicity)**2) - area_hole(diameter_hole)
     return (area_unitcell)
-
+'''
 
 def fill_ratio_square( diameter_hole, period,diameter_pd ):
     area_hole=np.pi * (diameter_hole/2)**2
